@@ -16,11 +16,11 @@ def get_transcript(video_id):
     transcript=' '.join([d['text'] for d in transcript_list])
     return transcript
 
-def get_summary():
-    summariser=pipeline('summarization')
+def get_summary(transcript):
+    summariser=pipeline('summarization',model="t5-base", tokenizer="t5-base", framework="tf")
     summary=''
-    for i in range(0,len((transcript)//100)+1):
-        summary_text=summariser(transcript(i*1000:(i+1)*1000))[0]['summary_text']
+    for i in range(0,(len(transcript)//100)+1):
+        summary_text=summariser(transcript[i*1000:(i+1)*1000],min_length=5, max_length=1000)[0]['summary_text']
         summary=summary+summary_text+' '
     return summary
 
